@@ -25,3 +25,21 @@ Each service is independently deployable and communicates via REST APIs.
 - **Spring Data JPA** for database interaction
 - **H2 / MySQL** as the database (configurable)
 - **Lombok** for boilerplate code reduction
+
+---
+
+## 📦 Future Enhancements
+
+- authentication and authorization (Spring Security + JWT)
+- Integrate with Kafka for event-driven communication 
+- Deploy using Docker Compose or Kubernetes
+
+---
+
+## 🧑‍💻 Contributing
+Contributions are welcome! Please fork the repo and submit a pull request.
+
+---
+
+## 📄 License
+This project is licensed under the [MIT License](https://opensource.org/license/mit).
