@@ -32,24 +32,44 @@ public class AccountsController {
     }
 
     @GetMapping
-    public CustomerDto fetchAccountDetails(@RequestParam
+    public ResponseEntity<CustomerDto> fetchAccountDetails(@RequestParam
                                                @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
                                                String mobileNumber) {
         CustomerDto customerDto = iAccountsService.fetchAccount(mobileNumber);
-        return customerDto;
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(customerDto);
     }
 
     @PutMapping
-    public boolean updateAccountDetails(@Valid @RequestBody CustomerDto customerDto) {
+    public ResponseEntity<ResponseDto> updateAccountDetails(@Valid @RequestBody CustomerDto customerDto) {
         boolean isUpdated = iAccountsService.updateAccount(customerDto);
-        return isUpdated;
+        if(isUpdated) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseDto(AccountsConstants.STATUS_200, AccountsConstants.MESSAGE_200)
+            );
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.EXPECTATION_FAILED)
+                    .body(new ResponseDto(AccountsConstants.STATUS_417, AccountsConstants.MESSAGE_417_UPDATE));
+        }
     }
 
     @DeleteMapping
-    public boolean deleteAccountDetails(@RequestParam
+    public ResponseEntity<ResponseDto> deleteAccountDetails(@RequestParam
                                             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
                                             String mobileNumber) {
         boolean isDeleted = iAccountsService.deleteAccount(mobileNumber);
-        return isDeleted;
+
+        if(isDeleted) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseDto(AccountsConstants.STATUS_200, AccountsConstants.MESSAGE_200)
+            );
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.EXPECTATION_FAILED)
+                    .body(new ResponseDto(AccountsConstants.STATUS_417, AccountsConstants.MESSAGE_417_DELETE));
+        }
     }
 }
