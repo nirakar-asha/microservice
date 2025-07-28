@@ -4,6 +4,8 @@ import com.minibank.accounts.constants.AccountsConstants;
 import com.minibank.accounts.dto.CustomerDto;
 import com.minibank.accounts.dto.ResponseDto;
 import com.minibank.accounts.service.IAccountsService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -13,6 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(
+        name = "REST APIs for Accounts controller",
+        description = "REST APIs to create, fetch, update and delete a customer & accounts "
+)
 @RestController
 @RequestMapping(path = "/api/accounts", produces = {MediaType.APPLICATION_JSON_VALUE})
 @AllArgsConstructor
@@ -21,6 +27,10 @@ public class AccountsController {
 
     private IAccountsService iAccountsService;
 
+    @Operation(
+            summary = "Create an account",
+            description = "Rest API to create new customer and account inside the bank"
+    )
     @PostMapping
     public ResponseEntity<ResponseDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
         iAccountsService.createAccount(customerDto);
@@ -31,6 +41,10 @@ public class AccountsController {
         return response;
     }
 
+    @Operation(
+            summary = "Fetch an account",
+            description = "Rest API to fetch the customer and account details based on mobile number"
+    )
     @GetMapping
     public ResponseEntity<CustomerDto> fetchAccountDetails(@RequestParam
                                                @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
@@ -42,6 +56,10 @@ public class AccountsController {
                 .body(customerDto);
     }
 
+    @Operation(
+            summary = "Update an account",
+            description = "Rest API to update customer and account details based on account number"
+    )
     @PutMapping
     public ResponseEntity<ResponseDto> updateAccountDetails(@Valid @RequestBody CustomerDto customerDto) {
         boolean isUpdated = iAccountsService.updateAccount(customerDto);
@@ -56,6 +74,10 @@ public class AccountsController {
         }
     }
 
+    @Operation(
+            summary = "Delete an account",
+            description = "Rest API to delete customer and account details based on mobile number"
+    )
     @DeleteMapping
     public ResponseEntity<ResponseDto> deleteAccountDetails(@RequestParam
                                             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")

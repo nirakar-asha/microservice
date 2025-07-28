@@ -4,6 +4,8 @@ import com.minibank.loans.constants.LoansConstants;
 import com.minibank.loans.dto.LoansDto;
 import com.minibank.loans.dto.ResponseDto;
 import com.minibank.loans.service.ILoansService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -13,6 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(
+        name = "REST APIs for Loans controller",
+        description = "REST APIs to create, fetch, update and delete a customer's loans"
+)
 @RestController
 @RequestMapping(path = "/api/loans", produces = {MediaType.APPLICATION_JSON_VALUE})
 @AllArgsConstructor
@@ -20,6 +26,10 @@ import org.springframework.web.bind.annotation.*;
 public class LoansController {
     private ILoansService iLoansService;
 
+    @Operation(
+            summary = "Create a loan",
+            description = "Rest API to create a new loan for a customer"
+    )
     @PostMapping
     public ResponseEntity<ResponseDto> createLoan(@RequestParam
                                                   @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
@@ -30,6 +40,10 @@ public class LoansController {
                 .body(new ResponseDto(LoansConstants.STATUS_201, LoansConstants.MESSAGE_201));
     }
 
+    @Operation(
+            summary = "Fetch the loans details",
+            description = "REST API to fetch the loans details for a customer"
+    )
     @GetMapping
     public ResponseEntity<LoansDto> fetchLoanDetails(@RequestParam
                                                      @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
@@ -38,6 +52,10 @@ public class LoansController {
         return ResponseEntity.status(HttpStatus.OK).body(loansDto);
     }
 
+    @Operation(
+            summary = "Update the loan details",
+            description = "REST API to update the loan details based on loan number"
+    )
     @PutMapping
     public ResponseEntity<ResponseDto> updateLoanDetails(@Valid @RequestBody LoansDto loansDto) {
         boolean isUpdated = iLoansService.updateLoan(loansDto);
@@ -52,6 +70,10 @@ public class LoansController {
         }
     }
 
+    @Operation(
+            summary = "Delete the loans details",
+            description = "REST API to delete the loans details for a customer"
+    )
     @DeleteMapping
     public ResponseEntity<ResponseDto> deleteLoanDetails(@RequestParam
                                                          @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
